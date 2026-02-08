@@ -2,6 +2,12 @@
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
+const props = defineProps({
+  isOpen: Boolean
+})
+
+const emit = defineEmits(['close'])
+
 const router = useRouter()
 const route = useRoute()
 
@@ -36,15 +42,17 @@ function isActive(path) {
 
 function navigateTo(path) {
   router.push(path)
+  emit('close') // Close sidebar on mobile after navigation
 }
 </script>
 
 <template>
-  <div class="sidebar">
+  <div :class="['sidebar', { 'sidebar-open': isOpen }]">
     <div class="sidebar-header">
       <div class="logo-container">
         <img src="/logo.png" alt="Daewoong Logo" class="logo-image" />        
       </div>
+      <button class="close-btn" @click="emit('close')">✕</button>
     </div>
 
     <nav class="menu">
@@ -79,11 +87,46 @@ function navigateTo(path) {
   left: 0;
   top: 0;
   overflow-y: auto;
+  transition: transform 0.3s ease;
+  z-index: 100;
 }
 
 .sidebar-header {
   padding: 2rem 1.5rem;
   border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.close-btn {
+  display: none;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.5rem;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+  
+  .close-btn {
+    display: block;
+  }
 }
 
 .logo-container {
