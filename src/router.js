@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { getCurrentUser } from './firebase/auth'
 import Login from './components/Login.vue'
-import Home from './components/Home.vue'
+import DashboardLayout from './components/DashboardLayout.vue'
+import ImageManagement from './components/ImageManagement.vue'
 
 const routes = [
     {
@@ -12,9 +13,26 @@ const routes = [
     },
     {
         path: '/',
-        name: 'Home',
-        component: Home,
-        meta: { requiresAuth: true }
+        component: DashboardLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                name: 'ImageManagement',
+                component: ImageManagement
+            },
+            {
+                path: 'image-search',
+                name: 'ImageSearch',
+                component: () => import('./components/ImageSearch.vue')
+            }
+            // 향후 추가할 라우트들
+            // {
+            //   path: 'settings',
+            //   name: 'Settings',
+            //   component: () => import('./components/Settings.vue')
+            // }
+        ]
     }
 ]
 

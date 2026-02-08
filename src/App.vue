@@ -26,26 +26,22 @@ async function handleLogout() {
 
 <template>
   <div class="app">
-    <header v-if="route.path !== '/login'" class="header">
+    <header v-if="route.path !== '/login' && user" class="header">
       <div class="header-content">
-        <div>
+        <div class="header-title">
           <h1>제조를 위한 모든 것</h1>
-          <p class="tagline">설비 · 자재 · 품질 · 문서를 카테고리별로 관리하세요.</p>
+          <p class="tagline">설비 · 자재 · 품질 · 문서 등 카테고리를 관리하세요.</p>
         </div>
-        <div v-if="user" class="user-section">
+        <div class="user-section">
           <span class="user-email">{{ user.email }}</span>
           <button @click="handleLogout" class="btn-logout">로그아웃</button>
         </div>
       </div>
     </header>
 
-    <main :class="{ 'no-header': route.path === '/login' }">
+    <main :class="{ 'with-header': route.path !== '/login' && user, 'no-header': route.path === '/login' }">
       <router-view />
     </main>
-
-    <footer v-if="route.path !== '/login'" class="footer">
-      <p>Vue + Firebase · 추후 앱 확장 예정..</p>
-    </footer>
   </div>
 </template>
 
@@ -55,38 +51,52 @@ async function handleLogout() {
   display: flex;
   flex-direction: column;
 }
+
 .header {
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1rem 2rem;
+  background: var(--bg);
   border-bottom: 1px solid var(--border);
+  margin-left: 250px;
+  width: calc(100% - 250px);
 }
+
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 2rem;
 }
-.header h1 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.75rem;
+
+.header-title h1 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.5rem;
   font-weight: 700;
+  color: var(--text);
   letter-spacing: -0.02em;
 }
-.tagline {
+
+.header-title .tagline {
   margin: 0;
+  font-size: 0.9rem;
   color: var(--text-muted);
-  font-size: 1rem;
 }
+
 .user-section {
   display: flex;
   align-items: center;
   gap: 1rem;
+  justify-content: flex-end;
 }
+
 .user-email {
   color: var(--text-muted);
   font-size: 0.9rem;
 }
+
 .btn-logout {
   padding: 0.5rem 1rem;
   border: 1px solid var(--border);
@@ -97,19 +107,27 @@ async function handleLogout() {
   cursor: pointer;
   transition: all 0.2s;
 }
+
 .btn-logout:hover {
   background: var(--border);
 }
+
+main {
+  flex: 1;
+}
+
+main.with-header {
+  padding-top: 70px;
+}
+
 main.no-header {
-  margin-top: 0;
   padding: 0;
 }
-.footer {
-  margin-top: 3rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 0.85rem;
+
+@media (max-width: 768px) {
+  .header {
+    margin-left: 0;
+    width: 100%;
+  }
 }
 </style>
