@@ -19,12 +19,20 @@ const routes = [
             {
                 path: '',
                 name: 'ImageManagement',
-                component: ImageManagement
+                component: ImageManagement,
+                meta: {
+                    title: '카테고리 관리',
+                    description: '이미지 분류를 위한 기준을 관리합니다'
+                }
             },
             {
                 path: 'image-search',
                 name: 'ImageSearch',
-                component: () => import('./components/ImageSearch.vue')
+                component: () => import('./components/ImageSearch.vue'),
+                meta: {
+                    title: 'AI 이미지 검색',
+                    description: '유사 이미지 및 과거 사례를 검색합니다'
+                }
             }
             // 향후 추가할 라우트들
             // {

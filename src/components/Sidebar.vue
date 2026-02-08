@@ -5,26 +5,29 @@ import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 
-const menuItems = ref([
+const menuSections = ref([
   {
-    id: 'image-management',
-    name: '카테고리 관리',
-    icon: '📁',
-    path: '/'
+    id: 'basic',
+    title: '[기본 관리]',
+    items: [
+      {
+        id: 'image-management',
+        name: '카테고리 관리',
+        path: '/'
+      }
+    ]
   },
   {
-    id: 'image-search',
-    name: '이미지검색',
-    icon: '🔍',
-    path: '/image-search'
+    id: 'ai',
+    title: '[AI 기능]',
+    items: [
+      {
+        id: 'image-search',
+        name: '이미지 검색',
+        path: '/image-search'
+      }
+    ]
   }
-  // 향후 추가할 메뉴들
-  // {
-  //   id: 'settings',
-  //   name: '설정',
-  //   icon: '⚙️',
-  //   path: '/settings'
-  // }
 ])
 
 function isActive(path) {
@@ -45,15 +48,21 @@ function navigateTo(path) {
     </div>
 
     <nav class="menu">
-      <button
-        v-for="item in menuItems"
-        :key="item.id"
-        :class="['menu-item', { active: isActive(item.path) }]"
-        @click="navigateTo(item.path)"
+      <div 
+        v-for="section in menuSections" 
+        :key="section.id" 
+        class="menu-section"
       >
-        <span class="icon">{{ item.icon }}</span>
-        <span class="name">{{ item.name }}</span>
-      </button>
+        <div class="section-header">{{ section.title }}</div>
+        <button
+          v-for="item in section.items"
+          :key="item.id"
+          :class="['menu-item', { active: isActive(item.path) }]"
+          @click="navigateTo(item.path)"
+        >
+          {{ item.name }}
+        </button>
+      </div>
     </nav>
   </div>
 </template>
@@ -99,46 +108,53 @@ function navigateTo(path) {
 }
 
 .menu {
-  padding: 1rem 0.75rem;
+  padding: 1rem 0;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+}
+
+.menu-section {
+  margin-bottom: 1.5rem;
+}
+
+.menu-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-header {
+  padding: 0.5rem 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.25rem;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 8px;
   background: transparent;
   color: var(--text);
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s;
   text-align: left;
+  width: 100%;
+  border-left: 3px solid transparent;
 }
 
 .menu-item:hover {
   background: var(--bg);
+  color: var(--primary);
 }
 
 .menu-item.active {
-  background: var(--primary);
-  color: white;
-}
-
-.menu-item .icon {
-  font-size: 1.2rem;
-  width: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.menu-item .name {
-  flex: 1;
-  font-weight: 500;
+  background: rgba(var(--primary-rgb, 102, 126, 234), 0.1);
+  color: var(--primary);
+  border-left-color: var(--primary);
+  font-weight: 600;
 }
 </style>

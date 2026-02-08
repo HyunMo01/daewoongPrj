@@ -1,11 +1,14 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { onAuthChanged, logOut } from './firebase/auth'
 
 const router = useRouter()
 const route = useRoute()
 const user = ref(null)
+
+const pageTitle = computed(() => route.meta?.title || '제조를 위한 모든 것')
+const pageDescription = computed(() => route.meta?.description || '설비 · 자재 · 품질 · 문서 등 카테고리를 관리하세요.')
 
 onMounted(() => {
   onAuthChanged((authUser) => {
@@ -29,8 +32,8 @@ async function handleLogout() {
     <header v-if="route.path !== '/login' && user" class="header">
       <div class="header-content">
         <div class="header-title">
-          <h1>제조를 위한 모든 것</h1>
-          <p class="tagline">설비 · 자재 · 품질 · 문서 등 카테고리를 관리하세요.</p>
+          <h1>{{ pageTitle }}</h1>
+          <p class="tagline">{{ pageDescription }}</p>
         </div>
         <div class="user-section">
           <span class="user-email">{{ user.email }}</span>
