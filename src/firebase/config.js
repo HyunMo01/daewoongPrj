@@ -1,8 +1,9 @@
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth'
 
 /**
- * Firebase 설정 (Firestore만 사용, Storage 미사용)
+ * Firebase 설정 (Firestore + Authentication)
  * .env 파일에 아래 변수들을 설정하세요.
  */
 const firebaseConfig = {
@@ -16,4 +17,5 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 export const db = getFirestore(app)
+export const auth = getAuth(app)
 export default app
